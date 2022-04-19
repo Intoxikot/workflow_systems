@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<Form Name="NewWorkflowRemaind" Title="Остатки платежей по договорам" Width="700" Height="400" StartPosition="CenterScreen" FontStyle="DefaultFont" ForeColor="DefaultColor" StatusBar="True">
+  <Appearance>
+    <Colors>
+      <Color Name="DefaultColor" Red="0" Green="0" Blue="0" Alpha="255" />
+    </Colors>
+    <FontStyles>
+      <FontStyle Name="DefaultFont" Font="Verdana" Size="8" />
+    </FontStyles>
+  </Appearance>
+
+  <DataConnections>
+    <DataConnection Name="PaymentRemaindPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="PaymentRemaindSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="ClientId" />
+          <Field Name="AgreementId" />
+          <Field Name="AgreementValue" />
+          <Field Name="RemaindValue" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <DataConnection Name="AgreementPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="AgreementSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="AgreementId" />
+          <Field Name="Title" />
+          <Field Name="DateCreated" />
+          <Field Name="ClientId" />
+          <Field Name="CityId" />
+          <Field Name="Summ" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <DataConnection Name="ClientPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="ClientSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="ClientId" />
+          <Field Name="Title" />
+          <Field Name="CityId" />
+          <Field Name="BranchId" />
+          <Field Name="Address" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+
+  </DataConnections>
+
+  <Conditions>
+    <Condition Name="FormClosingCondition" Type="FormClosingCondition" Assembly="Conditions" />
+  </Conditions>
+
+  <Commands>
+    <Command Name="FormCloseCommand" Type="FormCloseCommand" Assembly="Commands" />
+  </Commands>
+
+  <Executions>
+    <Execution>
+      <ConditionExpression>
+        <Condition Name="FormClosingCondition" />
+      </ConditionExpression>
+      <Commands>
+        <Command Name="FormCloseCommand" />
+      </Commands>
+    </Execution>
+  </Executions>
+
+  <MyObjects>
+    <MyObject Name="PaymentRemaindDatabaseTable" Type="DatabaseTable" Assembly="ComplexControls">
+      <Top>27</Top>
+      <Left>5</Left>
+      <Height>370</Height>
+      <Width>590</Width>
+      <AllowInsert>False</AllowInsert>
+      <AllowUpdate>False</AllowUpdate>
+      <AllowDelete>False</AllowDelete>
+      <SourceDataConnection Name="PaymentRemaindPrimaryGetDataConnection" />
+      <Columns>
+        <Column Name="ClientId" Type="DatabaseTableColumnComboBox" Assembly="DatabaseTableColumnControls">
+          <Width>150</Width>
+          <Title>Клиент</Title>
+          <ValueList>
+            <DataConnection SourceDataConnection="ClientPrimaryGetDataConnection">
+              <Fields>
+                <Field Name="ClientId" />
+                <Field Name="Title" />
+              </Fields>
+            </DataConnection>
+          </ValueList>
+        </Column>
+        <Column Name="AgreementId" Type="DatabaseTableColumnComboBox" Assembly="DatabaseTableColumnControls">
+          <Width>150</Width>
+          <Title>Договор</Title>
+          <ValueList>
+            <DataConnection SourceDataConnection="AgreementPrimaryGetDataConnection">
+              <Fields>
+                <Field Name="AgreementId" />
+                <Field Name="Title" />
+              </Fields>
+            </DataConnection>
+          </ValueList>
+        </Column>
+        <Column Name="AgreementValue" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Width>150</Width>
+          <Title>Сумма договора</Title>
+        </Column>
+        <Column Name="RemaindValue" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Width>150</Width>
+          <Title>Остаток платежей</Title>
+        </Column>
+      </Columns>
+    </MyObject>
+  </MyObjects>
+</Form>

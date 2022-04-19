@@ -1,0 +1,298 @@
+<?xml version="1.0"?>
+<Form Name="NewWorkflowAgreementItemForm" Title="Изменить договор" Width="210" Height="185" StartPosition="CenterScreen" FontStyle="DefaultFont" ForeColor="DefaultColor" StatusBar="True">
+
+  <Parameters>
+    <Parameter Name="AgreementId" />
+  </Parameters>
+
+  <Appearance>
+    <Colors>
+      <Color Name="DefaultColor" Red="0" Green="0" Blue="0" Alpha="255" />
+    </Colors>
+    <FontStyles>
+      <FontStyle Name="DefaultFont" Font="Verdana" Size="8" />
+    </FontStyles>
+  </Appearance>
+
+  <DataConnections>
+    <!-- Основное соединение -->
+    <DataConnection Name="AgreementItemPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="AgreementItemSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="Title" />
+          <Field Name="DateCreated" />
+          <Field Name="CityId" />
+          <Field Name="ClientId" />
+          <Field Name="Summ" />
+        </Fields>
+        <Parameters>
+          <Parameter NativeName="AgreementId">
+            <Value>
+              <Parameter Name="AgreementId" />
+            </Value>
+          </Parameter>
+        </Parameters>
+      </SqlQuery>
+    </DataConnection>
+
+    <!-- Соединение с городами -->
+    <DataConnection Name="CityPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="CitySelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="CityId" />
+          <Field Name="Title" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <!-- Соединение с клиентами -->
+    <DataConnection Name="ClientPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="ClientSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="ClientId" />
+          <Field Name="Title" />
+          <Field Name="CityId" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <!-- Фильтр клиентов по городам -->
+    <DataConnection Name="ClientSecondaryGetDataConnection" Type="SecondaryGetDataConnection" Assembly="DataConnections">
+      <SourceDataConnection Name="ClientPrimaryGetDataConnection" />
+      <Filter>
+        <Field NativeName="CityId" />
+        <Value>
+          <Object Name="CityComboBox" />
+        </Value>
+        <DataType Type="IntegerDataType" />
+      </Filter>
+    </DataConnection>
+
+    <!-- Изменение данных о договоре -->
+    <DataConnection Name="AgreementUpdateSetDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="AgreementId">
+          <Value>
+            <Parameter Name="AgreementId" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Title">
+          <Value>
+            <Object Name="TitleTextBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="ClientId">
+          <Value>
+            <Object Name="ClientComboBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Summ">
+          <Value>
+            <Object Name="SummNumericBox" />
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="AgreementUpdateSqlQuery" Type="Update" />
+      </SqlQueries>
+    </DataConnection>
+
+    <!-- Удаление договора -->
+    <DataConnection Name="AgreementDeleteSetDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="AgreementId">
+          <Value>
+            <Parameter Name="AgreementId" />
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="AgreementDeleteSqlQuery" Type="Delete" />
+      </SqlQueries>
+    </DataConnection>
+  </DataConnections>
+
+  <Conditions>
+    <Condition Name="FormClosingCondition" Type="FormClosingCondition" Assembly="Conditions" />
+    <Condition Name="TitleTextBoxEmptyEqualCondition" Type="EqualCondition" Assembly="Conditions">
+      <Items>
+        <Item>
+          <Object Name="TitleTextBox" />
+        </Item>
+        <Item />
+      </Items>
+    </Condition>
+    <Condition Name="ClientComboBoxIsNullCondition" Type="IsNullCondition" Assembly="Conditions">
+      <Items>
+        <Item>
+          <Object Name="ClientComboBox" />
+        </Item>
+      </Items>
+    </Condition>
+    <Condition Name="SummNumericBox0GreaterCondition" Type="GreaterCondition" Assembly="Conditions">
+      <Items>
+        <Item>
+          <Object Name="SummNumericBox" />
+        </Item>
+        <Item>0</Item>
+      </Items>
+      <DataType Type="DoubleDataType" />
+    </Condition>
+  </Conditions>
+
+  <Commands>
+    <Command Name="FormCloseCommand" Type="FormCloseCommand" Assembly="Commands" />
+    <Command Name="AgreementUpdateSaveCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="AgreementUpdateSetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="AgreementDeleteSaveCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="AgreementDeleteSetDataConnection" />
+      </DataConnections>
+    </Command>
+  </Commands>
+
+  <Executions>
+    <Execution>
+      <ConditionExpression>
+        <Condition Name="FormClosingCondition" />
+      </ConditionExpression>
+      <Commands>
+        <Command Name="FormCloseCommand" />
+      </Commands>
+    </Execution>
+  </Executions>
+
+  <MyObjects>
+    <MyObject Name="DateCreatedTextBox" Type="TextBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>5</Left>
+      <Width>200</Width>
+      <ReadOnly>True</ReadOnly>
+      <Text>
+        <DataConnection SourceDataConnection="AgreementItemPrimaryGetDataConnection">
+          <Fields>
+            <Field Name="DateCreated" />
+          </Fields>
+        </DataConnection>
+      </Text>
+    </MyObject>
+
+    <MyObject Name="TitleTextBox" Type="TextBox" Assembly="BaseControls">
+      <Top>35</Top>
+      <Left>5</Left>
+      <Width>200</Width>
+      <Text>
+        <DataConnection SourceDataConnection="AgreementItemPrimaryGetDataConnection">
+          <Fields>
+            <Field Name="Title" />
+          </Fields>
+        </DataConnection>
+      </Text>
+    </MyObject>
+
+    <MyObject Name="CityComboBox" Type="ComboBox" Assembly="BaseControls">
+      <Top>65</Top>
+      <Left>5</Left>
+      <Width>200</Width>
+      <NullValue Show="True" Title="[не выбрано]" />
+      <Sorted>True</Sorted>
+      <ValueList>
+        <DataConnection SourceDataConnection="CityPrimaryGetDataConnection">
+          <Fields>
+            <Field Name="CityId" />
+            <Field Name="Title" />
+          </Fields>
+        </DataConnection>
+      </ValueList>
+      <Value>
+        <DataConnection SourceDataConnection="AgreementItemPrimaryGetDataConnection">
+          <Fields>
+            <Field Name="CityId" />
+          </Fields>
+        </DataConnection>
+      </Value>
+    </MyObject>
+
+    <MyObject Name="ClientComboBox" Type="ComboBox" Assembly="BaseControls">
+      <Top>95</Top>
+      <Left>5</Left>
+      <Width>200</Width>
+      <NullValue Show="True" Title="[не выбрано]" />
+      <Sorted>True</Sorted>
+      <ValueList>
+        <DataConnection SourceDataConnection="ClientSecondaryGetDataConnection">
+          <Fields>
+            <Field Name="ClientId" />
+            <Field Name="Title" />
+          </Fields>
+        </DataConnection>
+      </ValueList>
+      <Value>
+        <DataConnection SourceDataConnection="AgreementItemPrimaryGetDataConnection">
+          <Fields>
+            <Field Name="ClientId" />
+          </Fields>
+        </DataConnection>
+      </Value>
+    </MyObject>
+
+    <MyObject Name="SummNumericBox" Type="NumericBox" Assembly="BaseControls">
+      <Top>125</Top>
+      <Left>5</Left>
+      <Width>200</Width>
+      <Increment>100</Increment>
+      <Maximum>99999999</Maximum>
+      <Minimum>0</Minimum>
+      <Value>
+        <DataConnection SourceDataConnection="AgreementItemPrimaryGetDataConnection">
+          <Fields>
+            <Field Name="Summ" />
+          </Fields>
+        </DataConnection>
+      </Value>
+    </MyObject>
+
+    <MyObject Name="SaveButton" Type="Button" Assembly="BaseControls">
+      <Top>155</Top>
+      <Left>5</Left>
+      <Height>25</Height>
+      <Width>95</Width>
+      <Text>Сохранить</Text>
+      <Commands>
+        <Command Name="AgreementUpdateSaveCommand" />
+        <Command Name="FormCloseCommand" />
+      </Commands>
+      <Enabled>
+        <And>
+          <Not>
+            <Condition Name="TitleTextBoxEmptyEqualCondition" />
+          </Not>
+          <Not>
+            <Condition Name="ClientComboBoxIsNullCondition" />
+          </Not>
+          <Condition Name="SummNumericBox0GreaterCondition" />
+        </And>
+      </Enabled>
+    </MyObject>
+
+    <MyObject Name="DeleteButton" Type="Button" Assembly="BaseControls">
+      <Top>155</Top>
+      <Left>105</Left>
+      <Height>25</Height>
+      <Width>95</Width>
+      <Text>Удалить</Text>
+      <Commands>
+        <Command Name="AgreementDeleteSaveCommand" />
+        <Command Name="FormCloseCommand" />
+      </Commands>
+    </MyObject>
+  </MyObjects>
+</Form>

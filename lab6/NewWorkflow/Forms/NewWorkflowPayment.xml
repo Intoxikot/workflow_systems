@@ -1,0 +1,350 @@
+<?xml version="1.0"?>
+<Form Name="NewWorkflowPaymentForm" Title="Платежи" Width="700" Height="400" StartPosition="CenterScreen" FontStyle="DefaultFont" ForeColor="DefaultColor" StatusBar="True">
+  <Appearance>
+    <Colors>
+      <Color Name="DefaultColor" Red="0" Green="0" Blue="0" Alpha="255" />
+    </Colors>
+    <FontStyles>
+      <FontStyle Name="DefaultFont" Font="Verdana" Size="8" />
+    </FontStyles>
+  </Appearance>
+
+  <DataConnections>
+    <DataConnection Name="PaymentPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="PaymentSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="PaymentId" />
+          <Field Name="DateCreated" />
+          <Field Name="AgreementId" />
+          <Field Name="ClientId" />
+          <Field Name="Value" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <DataConnection Name="AgreementPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="AgreementSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="AgreementId" />
+          <Field Name="Title" />
+          <Field Name="DateCreated" />
+          <Field Name="ClientId" />
+          <Field Name="CityId" />
+          <Field Name="Summ" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <DataConnection Name="ClientPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="ClientSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="ClientId" />
+          <Field Name="Title" />
+          <Field Name="CityId" />
+          <Field Name="BranchId" />
+          <Field Name="Address" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <DataConnection Name="PaymentSetDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="AgreementId">
+          <Value>
+            <Object Name="AgreementComboBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Value">
+          <Value>
+            <Object Name="SummNumericBox" />
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="PaymentInsertSqlQuery" Type="Insert" />
+      </SqlQueries>
+    </DataConnection>
+
+    <DataConnection Name="PaymentUpdateSaveDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="PaymentId">
+          <Value>
+            <Object Name="PaymentDatabaseTable">
+              <Property Name="SelectedRowCellValueByColumnName">
+                <Parameters>
+                  <Parameter Name="ColumnName">PaymentId</Parameter>
+                </Parameters>
+              </Property>
+            </Object>
+          </Value>
+        </Parameter>
+        <Parameter NativeName="AgreementId">
+          <Value>
+            <Object Name="AgreementComboBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Value">
+          <Value>
+            <Object Name="SummNumericBox" />
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="PaymentUpdateSqlQuery" Type="Insert" />
+      </SqlQueries>
+    </DataConnection>
+
+    <DataConnection Name="PaymentDeleteSaveDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="PaymentId">
+          <Value>
+            <Object Name="PaymentDatabaseTable">
+              <Property Name="SelectedRowCellValueByColumnName">
+                <Parameters>
+                  <Parameter Name="ColumnName">PaymentId</Parameter>
+                </Parameters>
+              </Property>
+            </Object>
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="PaymentDeleteSqlQuery" Type="Update" />
+      </SqlQueries>
+    </DataConnection>
+
+  </DataConnections>
+  <Conditions>
+    <Condition Name="FormClosingCondition" Type="FormClosingCondition" Assembly="Conditions" />
+    <Condition Name="AgreementComboBoxIsNotNullCondition" Type="IsNotNullCondition" Assembly="Conditions">
+      <Items>
+        <Item>
+          <Object Name="AgreementComboBox" />
+        </Item>
+      </Items>
+    </Condition>
+    <Condition Name="SummNumericBox0GreaterCondition" Type="GreaterCondition" Assembly="Conditions">
+      <Items>
+        <Item>
+          <Object Name="SummNumericBox" />
+        </Item>
+        <Item>0</Item>
+      </Items>
+      <DataType Type="DoubleDataType" />
+    </Condition>
+
+    <Condition Name="PaymentDatabaseTableRowIsSelected" Type="IsNotNullCondition" Assembly="Conditions">
+      <Items>
+        <Item>
+          <Object Name="PaymentDatabaseTable">
+            <Property Name="SelectedRowCellValueByColumnName">
+              <Parameters>
+                <Parameter Name="ColumnName">PaymentId</Parameter>
+              </Parameters>
+            </Property>
+          </Object>
+        </Item>
+      </Items>
+    </Condition>
+  </Conditions>
+
+  <Commands>
+    <Command Name="FormCloseCommand" Type="FormCloseCommand" Assembly="Commands" />
+    <Command Name="PaymentSaveCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="PaymentSetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="PaymentUpdateSaveCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="PaymentUpdateSaveDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="PaymentDeleteCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="PaymentDeleteSaveDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="PaymentDataConnectionRefreshCommand" Type="DataConnectionRefreshCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="PaymentPrimaryGetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="RemaindFormShowCommand" Type="FormShowCommand" Assembly="Commands">
+      <Xml Type="Path">NewWorkflowRemaind.xml</Xml>
+      <Show Type="Modal" />
+    </Command>
+  </Commands>
+
+  <Executions>
+    <Execution>
+      <ConditionExpression>
+        <Condition Name="FormClosingCondition" />
+      </ConditionExpression>
+      <Commands>
+        <Command Name="FormCloseCommand" />
+      </Commands>
+    </Execution>
+  </Executions>
+
+  <MyObjects>
+    <MyObject Name="PaymentDatabaseTable" Type="DatabaseTable" Assembly="ComplexControls">
+      <Top>27</Top>
+      <Left>5</Left>
+      <Height>370</Height>
+      <Width>590</Width>
+      <AllowInsert>False</AllowInsert>
+      <AllowUpdate>False</AllowUpdate>
+      <AllowDelete>False</AllowDelete>
+      <SourceDataConnection Name="PaymentPrimaryGetDataConnection" />
+      <Columns>
+        <Column Name="PaymentId" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Visible>False</Visible>
+        </Column>
+        <Column Name="DateCreated" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Title>Дата создания</Title>
+          <Width>150</Width>
+        </Column>
+        <Column Name="AgreementId" Type="DatabaseTableColumnComboBox" Assembly="DatabaseTableColumnControls">
+          <Title>Договор</Title>
+          <Width>200</Width>
+          <ValueList>
+            <DataConnection SourceDataConnection="AgreementPrimaryGetDataConnection">
+              <Fields>
+                <Field Name="AgreementId" />
+                <Field Name="Title" />
+              </Fields>
+            </DataConnection>
+          </ValueList>
+        </Column>
+        <Column Name="ClientId" Type="DatabaseTableColumnComboBox" Assembly="DatabaseTableColumnControls">
+          <Title>Клиент</Title>
+          <Width>120</Width>
+          <ValueList>
+            <DataConnection SourceDataConnection="ClientPrimaryGetDataConnection">
+              <Fields>
+                <Field Name="ClientId" />
+                <Field Name="Title" />
+              </Fields>
+            </DataConnection>
+          </ValueList>
+        </Column>
+        <Column Name="Value" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Title>Платеж</Title>
+          <Width>150</Width>
+        </Column>
+      </Columns>
+    </MyObject>
+
+    <MyObject Name="AgreementComboBox" Type="ComboBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>46</Left>
+      <Width>200</Width>
+      <NullValue Show="True" Title="[не выбрано]" />
+      <Sorted>True</Sorted>
+      <ValueList>
+        <DataConnection SourceDataConnection="AgreementPrimaryGetDataConnection">
+          <Fields>
+            <Field Name="AgreementId" />
+            <Field Name="Title" />
+          </Fields>
+        </DataConnection>
+      </ValueList>
+      <Value>
+        <Object Name="PaymentDatabaseTable">
+          <Property Name="SelectedRowCellValueByColumnName">
+            <Parameters>
+              <Parameter Name="ColumnName">AgreementId</Parameter>
+            </Parameters>
+          </Property>
+        </Object>
+      </Value>
+    </MyObject>
+
+    <MyObject Name="SummNumericBox" Type="NumericBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>246</Left>
+      <Width>200</Width>
+      <Increment>100</Increment>
+      <Maximum>99999999</Maximum>
+      <Minimum>0</Minimum>
+      <Value>
+        <Object Name="PaymentDatabaseTable">
+          <Property Name="SelectedRowCellValueByColumnName">
+            <Parameters>
+              <Parameter Name="ColumnName">Value</Parameter>
+            </Parameters>
+          </Property>
+        </Object>
+      </Value>
+    </MyObject>
+
+    <MyObject Name="AddButton" Type="Button" Assembly="BaseControls">
+      <Top>27</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Добавить</Text>
+      <Commands>
+        <Command Name="PaymentSaveCommand" />
+        <Command Name="PaymentDataConnectionRefreshCommand" />
+      </Commands>
+      <Enabled>
+        <And>
+          <Condition Name="AgreementComboBoxIsNotNullCondition" />
+          <Condition Name="SummNumericBox0GreaterCondition" />
+        </And>
+      </Enabled>
+    </MyObject>
+
+    <MyObject Name="UpdateButton" Type="Button" Assembly="BaseControls">
+      <Top>57</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Изменить</Text>
+      <Commands>
+        <Command Name="PaymentUpdateSaveCommand" />
+        <Command Name="PaymentDataConnectionRefreshCommand" />
+      </Commands>
+      <Enabled>
+        <And>
+          <Condition Name="AgreementComboBoxIsNotNullCondition" />
+          <Condition Name="SummNumericBox0GreaterCondition" />
+        </And>
+      </Enabled>
+    </MyObject>
+
+    <MyObject Name="DeleteButton" Type="Button" Assembly="BaseControls">
+      <Top>87</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Удалить</Text>
+      <Commands>
+        <Command Name="PaymentDeleteCommand" />
+        <Command Name="PaymentDataConnectionRefreshCommand" />
+      </Commands>
+      <Enabled>
+        <Condition Name="PaymentDatabaseTableRowIsSelected" />
+      </Enabled>
+    </MyObject>
+
+    <MyObject Name="ReportButton" Type="Button" Assembly="BaseControls">
+      <Top>187</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Остатки</Text>
+      <Commands>
+        <Command Name="RemaindFormShowCommand" />
+      </Commands>
+    </MyObject>
+  </MyObjects>
+</Form>

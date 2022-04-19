@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>NewWorkflow</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+		<nature>ru.wfsys.editor.nature.workflowNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>NewWorkflow.xml</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Workflow/NewWorkflow.xml</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
