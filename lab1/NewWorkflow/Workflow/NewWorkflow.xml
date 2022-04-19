@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Workflow Table="new_workflow.workflow" IdField="workflow_id" TitleField="title">
+  <UserSettings PublicUserTable="public.user" PublicUserIdField="user_id" PublicUserNameField="user_name" PublicUserDomainField="user_domain" PublicUserFullNameField="user_full_name" PublicUserEnabledField="enabled" MessengerUserTable="messenger.user" MessengerUserIdField="user_id" MessengerUserPublicIdField="public_user_id" Table="new_workflow.user" IdField="user_id" PublicIdField="public_user_id" GroupTable="new_workflow.group" GroupIdField="group_id" GroupNameField="name" UserGroupTable="new_workflow.user_group" UserGroupUserIdField="user_id" UserGroupGroupIdField="group_id" GroupGroupTable="new_workflow.group_group" GroupGroupChildIdField="child_group_id" GroupGroupParentIdField="parent_group_id" />
+  <HistoryStatesSettings StepTypeTable="new_workflow.step_type" StepTypeTableIdField="step_type_id" StepTypeTableNameField="name" StepTypeTableTitleField="title" StepStatusTable="new_workflow.step_status" StepStatusTableIdField="step_status_id" StepStatusTableNameField="name" StepStatusTableTitleField="title" ExecutedStepStatusTable="new_workflow.executed_step_status" ExecutedStepStatusTableIdField="executed_step_status_id" ExecutedStepStatusTableNameField="name" ExecutedStepStatusTableTitleField="title" ActionTable="new_workflow.action" ActionTableIdField="action_id" ActionTableNameField="name" ActionTableTitleField="title" WorkflowStateTable="new_workflow.workflow_state" WorkflowStateTableIdField="workflow_state_id" WorkflowStateTableWorkflowIdField="workflow_id" WorkflowStateTableActionIdField="action_id" WorkflowStateTableInitiatorIdField="initiator_id" WorkflowStateTableDateField="date" WorkflowStateTableAllowRollbackField="allow_rollback" StepStateTable="new_workflow.step_state" StepStateTableIdField="step_state_id" StepStateTableWorkflowStateIdField="workflow_state_id" StepStateTableStepTypeIdField="step_type_id" StepStateTableStepStatusIdField="step_status_id" StepStateTableExecuteStatusIdField="executed_step_status_id" StepStateTableEditorIdField="editor_id" StepStateWorkflowStateTable="new_workflow.step_state_workflow_state" StepStateWorkflowStateTableStepStateIdField="step_state_id" StepStateWorkflowStateTableWorkflowStateIdField="workflow_state_id" WorkflowTableWorkflowStateIdField="workflow_state_id" WorkflowEngineServiceUserId="0" />
+  <ExecutiveSettings GroupTable="new_workflow.executive_group" GroupWorkflowIdField="workflow_id" GroupStepTypeIdField="step_type_id" GroupIdField="group_id" UserTable="new_workflow.executive_user" UserWorkflowIdField="workflow_id" UserStepTypeIdField="step_type_id" UserIdField="user_id" />
+  <UpdateSettings TableName="new_workflow.update" QueryNameField="query_name" TableNameField="table_name" TypeField="type" ParameterField="parameter" UserIdField="user_id" DateField="date" />
+  <ReplySettings Table="new_workflow.reply" IdField="reply_id" StepTypeIdField="step_type_id" WorkflowIdField="workflow_id" UserIdField="user_id" ReplyIdField="messenger_reply_id" PausedField="paused" />
+  <MessageAppearanceSettings Table="new_workflow.message_appearance" IdField="message_appearance_id" StepTypeIdField="step_type_id" MessengerUserIdField="messenger_user_id" MessengerPriorityIdField="messenger_priority_id" ThemeField="theme" ShortField="short" TextField="text" DeadLineField="dead_line" DeadLineShiftField="dead_line_shift" LinkTitleField="link_title" LinkProgramField="link_program" LinkArgumentField="link_argument" StartConditionDateField="start_condition_date" StartConditionDateShiftField="start_condition_date_shift" FinishConditionCountField="finish_condition_count" FinishConditionDateField="finish_condition_date" FinishConditionDateShiftField="finish_condition_date_shift" BrakeConditionCountField="brake_condition_count" PeriodField="period" PeriodVariableField="period_variable" StartHourField="start_hour" FinishHourField="finish_hour" MissedShowPeriodField="missed_show_period" MissedShowPeriodVariableField="missed_show_period_variable" MandatoryLookField="mandatory_look" MandatoryTextField="mandatory_text" MandatoryUrlField="mandatory_url" EnabledField="enabled" />
+
+  <Steps />
+
+  <Conditions />
+
+  <Handlers />
+
+  <Commands />
+
+  <SqlQueries>
+    <SqlQuery Name="ClientSelectSqlQuery">
+      <Text> 
+        SELECT 
+          client_id AS "ClientId", 
+          title AS "Title", 
+          city AS "City", 
+          address AS "Address" 
+        FROM 
+          new_workflow.client 
+        ORDER BY 
+          client_id ASC 
+      </Text>
+    </SqlQuery>
+    <SqlQuery Name="ClientInsertSqlQuery">
+      <Text> 
+        INSERT INTO new_workflow.client ( title, city, address ) 
+        VALUES ( {Title}, {City}, {Address} )
+      </Text>
+    </SqlQuery>
+  </SqlQueries>
+
+  <Permissions>
+    <Permission Name="CommonSqlQueryPermission" Type="SqlQueryPermission">
+      <SqlQueries> </SqlQueries>
+    </Permission>
+    <Permission Name="ClientSqlQueryPermission" Type="SqlQueryPermission">
+      <SqlQueries>
+        <SqlQuery Name="ClientSelectSqlQuery" />
+        <SqlQuery Name="ClientInsertSqlQuery" />
+      </SqlQueries>
+    </Permission>
+  </Permissions>
+
+  <Roles>
+    <Role Name="CommonRole">
+      <Permissions>
+        <Permission Name="CommonSqlQueryPermission" />
+      </Permissions>
+    </Role>
+    <Role Name="AdministratorRole">
+      <Permissions>
+        <Permission Name="CommonSqlQueryPermission" />
+        <Permission Name="ClientSqlQueryPermission" />
+      </Permissions>
+    </Role>
+  </Roles>
+
+  <Groups>
+    <Group Name="AdministratorGroup">
+      <Roles>
+        <Role Name="CommonRole" />
+        <Role Name="AdministratorRole" />
+      </Roles>
+    </Group>
+  </Groups>
+</Workflow>
