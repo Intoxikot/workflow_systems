@@ -121,7 +121,7 @@
         </Fields>
       </SqlQuery>
     </DataConnection>
-    
+
     <DataConnection Name="BranchPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
       <SqlQuery Name="BranchSelectSqlQuery" Type="Select">
         <Workflow Name="NewWorkflow" />
@@ -153,6 +153,21 @@
     <Condition Name="ClientsDatabaseTableCellDoubleClickCondition" Type="CellDoubleClickCondition" Assembly="Conditions">
       <Table Name="ClientsDatabaseTable" />
     </Condition>
+
+    <Condition Name="ClientDatabaseTableRowIsSelected" Type="IsNotNullCondition" Assembly="Conditions">
+      <Items>
+        <Item>
+          <Object Name="ClientsDatabaseTable">
+            <Property Name="SelectedRowCellValueByColumnName">
+              <Parameters>
+                <Parameter Name="ColumnName">ClientId</Parameter>
+              </Parameters>
+            </Property>
+          </Object>
+        </Item>
+      </Items>
+    </Condition>
+
   </Conditions>
 
   <Commands>
@@ -320,7 +335,7 @@
         </Object>
       </Value>
     </MyObject>
-    
+
     <MyObject Name="BranchComboBox" Type="ComboBox" Assembly="BaseControls">
       <Top>5</Top>
       <Left>376</Left>
@@ -373,8 +388,8 @@
       </Commands>
       <Enabled>
         <And>
-	        <Condition Name="CityComboBoxIsNotNullCondition" />
-	        <Condition Name="BranchComboBoxIsNotNullCondition" />
+          <Condition Name="CityComboBoxIsNotNullCondition" />
+          <Condition Name="BranchComboBoxIsNotNullCondition" />
         </And>
       </Enabled>
     </MyObject>
@@ -391,8 +406,8 @@
       </Commands>
       <Enabled>
         <And>
-	        <Condition Name="CityComboBoxIsNotNullCondition" />
-	        <Condition Name="BranchComboBoxIsNotNullCondition" />
+          <Condition Name="CityComboBoxIsNotNullCondition" />
+          <Condition Name="BranchComboBoxIsNotNullCondition" />
         </And>
       </Enabled>
     </MyObject>
@@ -407,6 +422,9 @@
         <Command Name="ClientDeleteCommand" />
         <Command Name="ClientDataConnectionRefreshCommand" />
       </Commands>
+      <Enabled>
+        <Condition Name="ClientDatabaseTableRowIsSelected" />
+      </Enabled>
     </MyObject>
 
     <MyObject Name="CityButton" Type="Button" Assembly="BaseControls">
