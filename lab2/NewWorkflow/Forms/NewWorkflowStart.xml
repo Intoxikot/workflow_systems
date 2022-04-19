@@ -1,0 +1,257 @@
+﻿<?xml version="1.0"?>
+<Form Name="StartForm" Title="Новая программа" Width="700" Height="400" StartPosition="CenterScreen" FontStyle="DefaultFont" ForeColor="DefaultColor" StatusBar="True">
+  <Appearance>
+    <Colors>
+      <Color Name="DefaultColor" Red="0" Green="0" Blue="0" Alpha="255" />
+    </Colors>
+    <FontStyles>
+      <FontStyle Name="DefaultFont" Font="Verdana" Size="8" />
+    </FontStyles>
+  </Appearance>
+
+  <DataConnections>
+    <DataConnection Name="ClientPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="ClientSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="ClientId" />
+          <Field Name="Title" />
+          <Field Name="City" />
+          <Field Name="Address" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <DataConnection Name="ClientSetDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="Title">
+          <Value>
+            <Object Name="TitleTextBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="City">
+          <Value>
+            <Object Name="CityTextBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Address">
+          <Value>
+            <Object Name="AddressTextBox" />
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="ClientInsertSqlQuery" Type="Insert" />
+      </SqlQueries>
+    </DataConnection>
+
+    <DataConnection Name="ClientUpdateSetDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="ClientId">
+          <Value>
+            <Object Name="ClientsDatabaseTable">
+              <Property Name="SelectedRowCellValueByColumnName">
+                <Parameters>
+                  <Parameter Name="ColumnName">ClientId</Parameter>
+                </Parameters>
+              </Property>
+            </Object>
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Title">
+          <Value>
+            <Object Name="TitleTextBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="City">
+          <Value>
+            <Object Name="CityTextBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Address">
+          <Value>
+            <Object Name="AddressTextBox" />
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="ClientUpdateSqlQuery" Type="Update" />
+      </SqlQueries>
+    </DataConnection>
+    
+    <DataConnection Name="ClientDeleteDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="ClientId">
+          <Value>
+            <Object Name="ClientsDatabaseTable">
+              <Property Name="SelectedRowCellValueByColumnName">
+                <Parameters>
+                  <Parameter Name="ColumnName">ClientId</Parameter>
+                </Parameters>
+              </Property>
+            </Object>
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="ClientDeleteSqlQuery" Type="Update" />
+      </SqlQueries>
+    </DataConnection>
+  </DataConnections>
+
+  <Conditions>
+    <Condition Name="FormClosing" Type="FormClosingCondition" Assembly="Conditions" />
+  </Conditions>
+
+  <Commands>
+    <Command Name="FormClose" Type="FormCloseCommand" Assembly="Commands" />
+    <Command Name="ClientSaveCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="ClientSetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="ClientDataConnectionRefreshCommand" Type="DataConnectionRefreshCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="ClientPrimaryGetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="ClientUpdateSaveCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="ClientUpdateSetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="ClientDeleteCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="ClientDeleteDataConnection" />
+      </DataConnections>
+    </Command>
+  </Commands>
+
+  <Executions>
+    <Execution>
+      <ConditionExpression>
+        <Condition Name="FormClosing" />
+      </ConditionExpression>
+      <Commands>
+        <Command Name="FormClose" />
+      </Commands>
+    </Execution>
+  </Executions>
+
+  <MyObjects>
+
+    <MyObject Name="ClientsDatabaseTable" Type="DatabaseTable" Assembly="ComplexControls">
+      <Top>27</Top>
+      <Left>5</Left>
+      <Height>370</Height>
+      <Width>590</Width>
+      <AllowInsert>False</AllowInsert>
+      <AllowUpdate>False</AllowUpdate>
+      <AllowDelete>False</AllowDelete>
+      <SourceDataConnection Name="ClientPrimaryGetDataConnection" />
+      <Columns>
+        <Column Name="ClientId" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Visible>False</Visible>
+        </Column>
+        <Column Name="Title" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Title>Клиент</Title>
+          <Width>200</Width>
+        </Column>
+        <Column Name="City" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Title>Город</Title>
+          <Width>130</Width>
+        </Column>
+        <Column Name="Address" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Title>Адрес</Title>
+          <Width>200</Width>
+        </Column>
+      </Columns>
+    </MyObject>
+
+    <MyObject Name="TitleTextBox" Type="TextBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>46</Left>
+      <Width>200</Width>
+      <Text>
+        <Object Name="ClientsDatabaseTable">
+          <Property Name="SelectedRowCellValueByColumnName">
+            <Parameters>
+              <Parameter Name="ColumnName">Title</Parameter>
+            </Parameters>
+          </Property>
+        </Object>
+      </Text>
+    </MyObject>
+
+    <MyObject Name="CityTextBox" Type="TextBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>246</Left>
+      <Width>130</Width>
+      <Text>
+        <Object Name="ClientsDatabaseTable">
+          <Property Name="SelectedRowCellValueByColumnName">
+            <Parameters>
+              <Parameter Name="ColumnName">City</Parameter>
+            </Parameters>
+          </Property>
+        </Object>
+      </Text>
+    </MyObject>
+
+    <MyObject Name="AddressTextBox" Type="TextBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>376</Left>
+      <Width>200</Width>
+      <Text>
+        <Object Name="ClientsDatabaseTable">
+          <Property Name="SelectedRowCellValueByColumnName">
+            <Parameters>
+              <Parameter Name="ColumnName">Address</Parameter>
+            </Parameters>
+          </Property>
+        </Object>
+      </Text>
+    </MyObject>
+
+    <MyObject Name="AddButton" Type="Button" Assembly="BaseControls">
+      <Top>27</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Добавить</Text>
+      <Commands>
+        <Command Name="ClientSaveCommand" />
+        <Command Name="ClientDataConnectionRefreshCommand" />
+      </Commands>
+    </MyObject>
+
+    <MyObject Name="UpdateButton" Type="Button" Assembly="BaseControls">
+      <Top>57</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Изменить</Text>
+      <Commands>
+        <Command Name="ClientUpdateSaveCommand" />
+        <Command Name="ClientDataConnectionRefreshCommand" />
+      </Commands>
+    </MyObject>
+    
+    <MyObject Name="DeleteButton" Type="Button" Assembly="BaseControls">
+      <Top>87</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Удалить</Text>
+      <Commands>
+        <Command Name="ClientDeleteCommand" />
+        <Command Name="ClientDataConnectionRefreshCommand" />
+      </Commands>
+    </MyObject>
+    
+  </MyObjects>
+
+</Form>
