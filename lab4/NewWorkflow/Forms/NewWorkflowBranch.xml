@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<Form Name="NewWorkflowBranchForm" Title="Редактирование отраслей" Width="300" Height="400" StartPosition="CenterScreen" FontStyle="DefaultFont" ForeColor="DefaultColor" StatusBar="True">
+
+  <Appearance>
+    <Colors>
+      <Color Name="DefaultColor" Red="0" Green="0" Blue="0" Alpha="255" />
+    </Colors>
+    <FontStyles>
+      <FontStyle Name="DefaultFont" Font="Verdana" Size="8" />
+    </FontStyles>
+  </Appearance>
+
+  <DataConnections>
+    <DataConnection Name="BranchPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="BranchSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="BranchId" />
+          <Field Name="Title" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <DataConnection Name="BranchesDatabaseTableSetDataConnection" Type="DatabaseTableSetDataConnection" Assembly="ComplexDataConnections">
+      <DatabaseTable Name="BranchesDatabaseTable" />
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="BranchId">
+          <Column Name="BranchId" />
+        </Parameter>
+        <Parameter NativeName="Title">
+          <Column Name="Title" />
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="BranchInsertSqlQuery" Type="Insert" />
+        <SqlQuery Name="BranchUpdateSqlQuery" Type="Update" />
+        <SqlQuery Name="BranchDeleteSqlQuery" Type="Delete" />
+      </SqlQueries>
+      <Refresh>
+        <DataConnection Name="BranchPrimaryGetDataConnection" />
+      </Refresh>
+    </DataConnection>
+  </DataConnections>
+
+  <Conditions>
+    <Condition Name="FormClosingCondition" Type="FormClosingCondition" Assembly="Conditions" />
+  </Conditions>
+
+  <Commands>
+    <Command Name="FormCloseCommand" Type="FormCloseCommand" Assembly="Commands" />
+    <Command Name="BranchesSaveCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="BranchesDatabaseTableSetDataConnection" />
+      </DataConnections>
+    </Command>
+  </Commands>
+
+  <Executions>
+    <Execution>
+      <ConditionExpression>
+        <Condition Name="FormClosingCondition" />
+      </ConditionExpression>
+      <Commands>
+        <Command Name="FormCloseCommand" />
+      </Commands>
+    </Execution>
+  </Executions>
+
+  <MyObjects>
+    <MyObject Name="BranchesDatabaseTable" Type="DatabaseTable" Assembly="ComplexControls">
+      <Top>5</Top>
+      <Left>5</Left>
+      <Height>360</Height>
+      <Width>290</Width>
+      <SourceDataConnection Name="BranchPrimaryGetDataConnection" />
+      <Columns>
+        <Column Name="BranchId" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Visible>False</Visible>
+        </Column>
+        <Column Name="Title" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Title>Отрасль</Title>
+          <Width>230</Width>
+        </Column>
+      </Columns>
+    </MyObject>
+
+    <MyObject Name="SaveButton" Type="Button" Assembly="BaseControls">
+      <Top>370</Top>
+      <Left>5</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Сохранить</Text>
+      <Commands>
+        <Command Name="BranchesSaveCommand" />
+      </Commands>
+    </MyObject>
+  </MyObjects>
+
+</Form>

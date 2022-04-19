@@ -1,0 +1,410 @@
+<?xml version="1.0"?>
+<Form Name="StartForm" Title="Клиенты" Width="700" Height="400" StartPosition="CenterScreen" FontStyle="DefaultFont" ForeColor="DefaultColor" StatusBar="True">
+  <Appearance>
+    <Colors>
+      <Color Name="DefaultColor" Red="0" Green="0" Blue="0" Alpha="255" />
+    </Colors>
+    <FontStyles>
+      <FontStyle Name="DefaultFont" Font="Verdana" Size="8" />
+    </FontStyles>
+  </Appearance>
+
+  <DataConnections>
+    <DataConnection Name="ClientPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="ClientSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="ClientId" />
+          <Field Name="Title" />
+          <Field Name="CityId" />
+          <Field Name="BranchId" />
+          <Field Name="Address" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+    <DataConnection Name="ClientSetDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="Title">
+          <Value>
+            <Object Name="TitleTextBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="CityId">
+          <Value>
+            <Object Name="CityComboBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="BranchId">
+          <Value>
+            <Object Name="BranchComboBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Address">
+          <Value>
+            <Object Name="AddressTextBox" />
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="ClientInsertSqlQuery" Type="Insert" />
+      </SqlQueries>
+    </DataConnection>
+
+    <DataConnection Name="ClientUpdateSetDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="ClientId">
+          <Value>
+            <Object Name="ClientsDatabaseTable">
+              <Property Name="SelectedRowCellValueByColumnName">
+                <Parameters>
+                  <Parameter Name="ColumnName">ClientId</Parameter>
+                </Parameters>
+              </Property>
+            </Object>
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Title">
+          <Value>
+            <Object Name="TitleTextBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="CityId">
+          <Value>
+            <Object Name="CityComboBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="BranchId">
+          <Value>
+            <Object Name="BranchComboBox" />
+          </Value>
+        </Parameter>
+        <Parameter NativeName="Address">
+          <Value>
+            <Object Name="AddressTextBox" />
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="ClientUpdateSqlQuery" Type="Update" />
+      </SqlQueries>
+    </DataConnection>
+
+    <DataConnection Name="ClientDeleteDataConnection" Type="SetDataConnection" Assembly="DataConnections">
+      <Workflow Name="NewWorkflow" />
+      <Parameters>
+        <Parameter NativeName="ClientId">
+          <Value>
+            <Object Name="ClientsDatabaseTable">
+              <Property Name="SelectedRowCellValueByColumnName">
+                <Parameters>
+                  <Parameter Name="ColumnName">ClientId</Parameter>
+                </Parameters>
+              </Property>
+            </Object>
+          </Value>
+        </Parameter>
+      </Parameters>
+      <SqlQueries>
+        <SqlQuery Name="ClientDeleteSqlQuery" Type="Update" />
+      </SqlQueries>
+    </DataConnection>
+
+    <DataConnection Name="CityPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="CitySelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="CityId" />
+          <Field Name="Title" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+    
+    <DataConnection Name="BranchPrimaryGetDataConnection" Type="PrimaryGetDataConnection" Assembly="DataConnections">
+      <SqlQuery Name="BranchSelectSqlQuery" Type="Select">
+        <Workflow Name="NewWorkflow" />
+        <Fields>
+          <Field Name="BranchId" />
+          <Field Name="Title" />
+        </Fields>
+      </SqlQuery>
+    </DataConnection>
+
+  </DataConnections>
+
+  <Conditions>
+    <Condition Name="FormClosing" Type="FormClosingCondition" Assembly="Conditions" />
+    <Condition Name="CityComboBoxIsNotNullCondition" Type="IsNotNullCondition" Assembly="Conditions">
+      <Items>
+        <Item>
+          <Object Name="CityComboBox" />
+        </Item>
+      </Items>
+    </Condition>
+    <Condition Name="BranchComboBoxIsNotNullCondition" Type="IsNotNullCondition" Assembly="Conditions">
+      <Items>
+        <Item>
+          <Object Name="BranchComboBox" />
+        </Item>
+      </Items>
+    </Condition>
+  </Conditions>
+
+  <Commands>
+    <Command Name="FormClose" Type="FormCloseCommand" Assembly="Commands" />
+    <Command Name="ClientSaveCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="ClientSetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="ClientDataConnectionRefreshCommand" Type="DataConnectionRefreshCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="ClientPrimaryGetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="ClientUpdateSaveCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="ClientUpdateSetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="ClientDeleteCommand" Type="SaveCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="ClientDeleteDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="CityFormShowCommand" Type="FormShowCommand" Assembly="Commands">
+      <Xml Type="Path">NewWorkflowCity.xml</Xml>
+      <Show Type="Modal" />
+    </Command>
+    <Command Name="CityDataConnectionRefreshCommand" Type="DataConnectionRefreshCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="CityPrimaryGetDataConnection" />
+      </DataConnections>
+    </Command>
+    <Command Name="BranchFormShowCommand" Type="FormShowCommand" Assembly="Commands">
+      <Xml Type="Path">NewWorkflowBranch.xml</Xml>
+      <Show Type="Modal" />
+    </Command>
+    <Command Name="BranchDataConnectionRefreshCommand" Type="DataConnectionRefreshCommand" Assembly="Commands">
+      <DataConnections>
+        <DataConnection Name="BranchPrimaryGetDataConnection" />
+      </DataConnections>
+    </Command>
+  </Commands>
+
+  <Executions>
+    <Execution>
+      <ConditionExpression>
+        <Condition Name="FormClosing" />
+      </ConditionExpression>
+      <Commands>
+        <Command Name="FormClose" />
+      </Commands>
+    </Execution>
+  </Executions>
+
+  <MyObjects>
+    <MyObject Name="ClientsDatabaseTable" Type="DatabaseTable" Assembly="ComplexControls">
+      <Top>27</Top>
+      <Left>5</Left>
+      <Height>370</Height>
+      <Width>590</Width>
+      <AllowInsert>False</AllowInsert>
+      <AllowUpdate>False</AllowUpdate>
+      <AllowDelete>False</AllowDelete>
+      <SourceDataConnection Name="ClientPrimaryGetDataConnection" />
+      <Columns>
+        <Column Name="ClientId" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Visible>False</Visible>
+        </Column>
+        <Column Name="Title" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Title>Клиент</Title>
+          <Width>200</Width>
+        </Column>
+        <Column Name="CityId" Type="DatabaseTableColumnComboBox" Assembly="DatabaseTableColumnControls">
+          <Title>Город</Title>
+          <Width>130</Width>
+          <ValueList>
+            <DataConnection SourceDataConnection="CityPrimaryGetDataConnection">
+              <Fields>
+                <Field Name="CityId" />
+                <Field Name="Title" />
+              </Fields>
+            </DataConnection>
+          </ValueList>
+        </Column>
+        <Column Name="BranchId" Type="DatabaseTableColumnComboBox" Assembly="DatabaseTableColumnControls">
+          <Title>Отрасль</Title>
+          <Width>130</Width>
+          <ValueList>
+            <DataConnection SourceDataConnection="BranchPrimaryGetDataConnection">
+              <Fields>
+                <Field Name="BranchId" />
+                <Field Name="Title" />
+              </Fields>
+            </DataConnection>
+          </ValueList>
+        </Column>
+        <Column Name="Address" Type="DatabaseTableColumnTextBox" Assembly="DatabaseTableColumnControls">
+          <Title>Адрес</Title>
+          <Width>200</Width>
+        </Column>
+      </Columns>
+    </MyObject>
+
+    <MyObject Name="TitleTextBox" Type="TextBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>46</Left>
+      <Width>200</Width>
+      <Text>
+        <Object Name="ClientsDatabaseTable">
+          <Property Name="SelectedRowCellValueByColumnName">
+            <Parameters>
+              <Parameter Name="ColumnName">Title</Parameter>
+            </Parameters>
+          </Property>
+        </Object>
+      </Text>
+    </MyObject>
+
+    <MyObject Name="CityComboBox" Type="ComboBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>246</Left>
+      <Width>130</Width>
+      <NullValue Show="True" Title="[не выбрано]" />
+      <Sorted>True</Sorted>
+      <ValueList>
+        <DataConnection SourceDataConnection="CityPrimaryGetDataConnection">
+          <Fields>
+            <Field Name="CityId" />
+            <Field Name="Title" />
+          </Fields>
+        </DataConnection>
+      </ValueList>
+      <Value>
+        <Object Name="ClientsDatabaseTable">
+          <Property Name="SelectedRowCellValueByColumnName">
+            <Parameters>
+              <Parameter Name="ColumnName">CityId</Parameter>
+            </Parameters>
+          </Property>
+        </Object>
+      </Value>
+    </MyObject>
+    
+    <MyObject Name="BranchComboBox" Type="ComboBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>376</Left>
+      <Width>130</Width>
+      <NullValue Show="True" Title="[не выбрано]" />
+      <Sorted>True</Sorted>
+      <ValueList>
+        <DataConnection SourceDataConnection="BranchPrimaryGetDataConnection">
+          <Fields>
+            <Field Name="BranchId" />
+            <Field Name="Title" />
+          </Fields>
+        </DataConnection>
+      </ValueList>
+      <Value>
+        <Object Name="ClientsDatabaseTable">
+          <Property Name="SelectedRowCellValueByColumnName">
+            <Parameters>
+              <Parameter Name="ColumnName">BranchId</Parameter>
+            </Parameters>
+          </Property>
+        </Object>
+      </Value>
+    </MyObject>
+
+    <MyObject Name="AddressTextBox" Type="TextBox" Assembly="BaseControls">
+      <Top>5</Top>
+      <Left>506</Left>
+      <Width>180</Width>
+      <Text>
+        <Object Name="ClientsDatabaseTable">
+          <Property Name="SelectedRowCellValueByColumnName">
+            <Parameters>
+              <Parameter Name="ColumnName">Address</Parameter>
+            </Parameters>
+          </Property>
+        </Object>
+      </Text>
+    </MyObject>
+
+    <MyObject Name="AddButton" Type="Button" Assembly="BaseControls">
+      <Top>27</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Добавить</Text>
+      <Commands>
+        <Command Name="ClientSaveCommand" />
+        <Command Name="ClientDataConnectionRefreshCommand" />
+      </Commands>
+      <Enabled>
+        <And>
+	        <Condition Name="CityComboBoxIsNotNullCondition" />
+	        <Condition Name="BranchComboBoxIsNotNullCondition" />
+        </And>
+      </Enabled>
+    </MyObject>
+
+    <MyObject Name="UpdateButton" Type="Button" Assembly="BaseControls">
+      <Top>57</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Изменить</Text>
+      <Commands>
+        <Command Name="ClientUpdateSaveCommand" />
+        <Command Name="ClientDataConnectionRefreshCommand" />
+      </Commands>
+      <Enabled>
+        <And>
+	        <Condition Name="CityComboBoxIsNotNullCondition" />
+	        <Condition Name="BranchComboBoxIsNotNullCondition" />
+        </And>
+      </Enabled>
+    </MyObject>
+
+    <MyObject Name="DeleteButton" Type="Button" Assembly="BaseControls">
+      <Top>87</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Удалить</Text>
+      <Commands>
+        <Command Name="ClientDeleteCommand" />
+        <Command Name="ClientDataConnectionRefreshCommand" />
+      </Commands>
+    </MyObject>
+
+    <MyObject Name="CityButton" Type="Button" Assembly="BaseControls">
+      <Top>127</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Города</Text>
+      <Commands>
+        <Command Name="CityFormShowCommand" />
+        <Command Name="CityDataConnectionRefreshCommand" />
+      </Commands>
+    </MyObject>
+
+    <MyObject Name="BranchButton" Type="Button" Assembly="BaseControls">
+      <Top>157</Top>
+      <Left>597</Left>
+      <Height>25</Height>
+      <Width>100</Width>
+      <Text>Отрасли</Text>
+      <Commands>
+        <Command Name="BranchFormShowCommand" />
+        <Command Name="BranchDataConnectionRefreshCommand" />
+      </Commands>
+    </MyObject>
+  </MyObjects>
+
+</Form>
