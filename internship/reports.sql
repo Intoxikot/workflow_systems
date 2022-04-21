@@ -56,6 +56,3 @@ GROUP BY
 	to_char(document.date :: DATE, 'yyyy/mm')
 ORDER BY
 	date
-
-	
-	
