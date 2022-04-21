@@ -84,3 +84,9 @@ CREATE TABLE store.inventory_item (
 		FOREIGN KEY (product_id) 
 		REFERENCES store.product(product_id)
 );
+
+SELECT * FROM store.product;
+SELECT * FROM store.document;
+SELECT * FROM store.income;
+SELECT * FROM store.outcome;
+SELECT * FROM store.inventory_item;
