@@ -38,13 +38,13 @@ FROM
 	(SELECT 
 		income.product_id, 
 		income.document_id, 
-		(income.count * income.cost) as income
+		(income.count * income.cost * -1) as income
 	FROM store.income
 	UNION ALL
 	SELECT 
 		outcome.product_id, 
 		outcome.document_id, 
-		(outcome.count * outcome.cost * -1) as income
+		(outcome.count * outcome.cost) as income
 	FROM 
 		store.outcome
 	) as fluidity
