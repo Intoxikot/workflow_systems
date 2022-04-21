@@ -1,7 +1,7 @@
 -- Учет по остаткам для каждого товара (по ид)
 SELECT
 	fluidity.product_id,
-	sum(fluidity.count) as count
+	SUM(fluidity.count) as count
 FROM
 	store.document,
 	(SELECT 
@@ -70,7 +70,7 @@ ON
 -- Учет по бухгалтерскому движению средств по месяцам
 SELECT
 	to_char(document.date :: DATE, 'yyyy/mm') as date,
-	sum(fluidity.income) as income
+	SUM(fluidity.income) as income
 FROM
 	store.document,
 	(SELECT 
