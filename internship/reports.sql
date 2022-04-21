@@ -1,36 +1,58 @@
--- Учет по остаткам
+-- Учет по остаткам для каждого товара
 
-select 
-	product.name
-	sum(income.units) - sum(outcome.units)
-from 
-	product,
-	income,
-	outcome,
-	document
-where
-	product.product_id = income.product_id and
-	product.product_id = outcome.product_id and
-	document.document_id = income.document_id and
-	document.document_id = outcome.document_id and
-	document.date >= {BeginDate} and
-	document.date <= {FinalDate}
+SELECT
+	fluidity.product_id,
+	sum(fluidity.count) as count
+FROM
+	store.document,
+	(SELECT 
+		income.product_id, 
+		income.document_id, 
+		income.count
+	FROM 
+		store.income
+	UNION ALL
+	SELECT 
+		outcome.product_id, 
+		outcome.document_id, 
+		(outcome.count * -1) as count
+	FROM 
+		store.outcome
+	) as fluidity
+WHERE
+	document.document_id = fluidity.document_id and
+	document.document_id = fluidity.document_id 
+	/* and document.date >= {BeginDate} and document.date <= {FinalDate} */
 group by
-	product.product_id
+	fluidity.product_id
 	
--- Учет по бухгалтерии
-	
-select 
-	sum(income.units * income.cost) - sum(outcome.units * outcome.cost)
-from
-	document,
-	income,
-	outcome
-where
-	document.document_id = income.document_id and
-	document.document_id = outcome.document_id
-group by
-	... (различные варианты группировки по годам, кварталам, месяцам, неделям, дням, часам)
+
+-- Учет по бухгалтерскому движению средств по месяцам
+
+SELECT
+	to_char(document.date :: DATE, 'yyyy/mm'),
+	sum(fluidity.income) as income
+FROM
+	store.document,
+	(SELECT 
+		income.product_id, 
+		income.document_id, 
+		(income.count * income.cost) as income
+	FROM store.income
+	UNION ALL
+	SELECT 
+		outcome.product_id, 
+		outcome.document_id, 
+		(outcome.count * outcome.cost * -1) as income
+	FROM 
+		store.outcome
+	) as fluidity
+WHERE
+	document.document_id = fluidity.document_id and
+	document.document_id = fluidity.document_id  
+	/* and document.date >= {BeginDate} and document.date <= {FinalDate} */
+GROUP BY
+	to_char(document.date :: DATE, 'yyyy/mm')
 
 	
 	
