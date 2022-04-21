@@ -1,4 +1,4 @@
--- CREATE DATABASE store; 
+-- CREATE SCHEMA store; 
 
 DROP TABLE IF EXISTS store.product;
 DROP TABLE IF EXISTS store.income;
