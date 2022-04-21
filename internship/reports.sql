@@ -1,4 +1,4 @@
--- Учет по остаткам для каждого товара (по ид)
+-- Учет по остаткам для каждого товара в наличии (по ид)
 SELECT
 	fluidity.product_id,
 	SUM(fluidity.count) as count
@@ -28,7 +28,8 @@ ORDER BY
 	fluidity.product_id
 
 	
--- Учет по остаткам для каждого товара (с именем товара)
+/* Учет по остаткам для каждого товара в наличии (с именем товара)
+Для отображения всех товаров заменить remind.count на COALESCE(remind.count, 0.0000) и JOIN на LEFT JOIN соответственно */
 SELECT 
 	product.product_id,
 	product.name,
