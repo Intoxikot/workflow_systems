@@ -1,12 +1,4 @@
--- postgresql 10
-
-CREATE DATABASE workflow_technology
-    WITH 
-    OWNER = root
-    ENCODING = 'UTF8'
-    CONNECTION LIMIT = -1;
-
-CREATE SCHEMA IF NOT EXISTS store; 
+CREATE SCHEMA store; 
 
 DROP TABLE IF EXISTS store.inventory_item;
 DROP TABLE IF EXISTS store.income;
@@ -20,13 +12,13 @@ DROP SEQUENCE IF EXISTS store.income_id_seq;
 DROP SEQUENCE IF EXISTS store.outcome_id_seq;
 DROP SEQUENCE IF EXISTS store.inventory_item_id_seq;
 
-CREATE SEQUENCE IF NOT EXISTS store.product_id_seq;
-CREATE SEQUENCE IF NOT EXISTS store.income_id_seq;
-CREATE SEQUENCE IF NOT EXISTS store.outcome_id_seq;
-CREATE SEQUENCE IF NOT EXISTS store.document_id_seq;
-CREATE SEQUENCE IF NOT EXISTS store.inventory_item_id_seq;
+CREATE SEQUENCE store.product_id_seq;
+CREATE SEQUENCE store.income_id_seq;
+CREATE SEQUENCE store.outcome_id_seq;
+CREATE SEQUENCE store.document_id_seq;
+CREATE SEQUENCE store.inventory_item_id_seq;
 
-CREATE TABLE IF NOT EXISTS store.product (
+CREATE TABLE store.product (
 	product_id int NOT NULL 
 	DEFAULT NEXTVAL('store.product_id_seq'::regclass),
 	name character varying NOT NULL,
@@ -34,7 +26,7 @@ CREATE TABLE IF NOT EXISTS store.product (
 		PRIMARY KEY (product_id)
 );
 
-CREATE TABLE IF NOT EXISTS store.document (
+CREATE TABLE store.document (
 	document_id int NOT NULL
 	DEFAULT NEXTVAL('store.document_id_seq'::regclass),
 	code character varying NOT NULL UNIQUE,
@@ -43,7 +35,7 @@ CREATE TABLE IF NOT EXISTS store.document (
 		PRIMARY KEY ("document_id")
 );
 
-CREATE TABLE IF NOT EXISTS store.income (
+CREATE TABLE store.income (
 	income_id bigint NOT NULL
 	DEFAULT NEXTVAL('store.income_id_seq'::regclass),
 	document_id int NOT NULL,
@@ -60,7 +52,7 @@ CREATE TABLE IF NOT EXISTS store.income (
 		REFERENCES store.document (document_id)
 );
 
-CREATE TABLE IF NOT EXISTS store.outcome (
+CREATE TABLE store.outcome (
 	outcome_id bigint NOT NULL
 	DEFAULT NEXTVAL('store.outcome_id_seq'::regclass),
 	document_id int NOT NULL,
@@ -77,7 +69,7 @@ CREATE TABLE IF NOT EXISTS store.outcome (
 		REFERENCES store.document (document_id)
 );
 
-CREATE TABLE IF NOT EXISTS store.inventory_item (
+CREATE TABLE store.inventory_item (
 	item_id bigint NOT NULL
 	DEFAULT NEXTVAL('store.inventory_item_id_seq'::regclass),
 	document_id int NOT NULL,
