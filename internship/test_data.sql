@@ -1,4 +1,5 @@
 INSERT INTO store.product (name) VALUES ('Автошина Continental');
+INSERT INTO store.product (name) VALUES ('Автошина ProExpert');
 
 INSERT INTO store.document (code, date) VALUES ('Поступление 1', '2022.01.10 10:00');
 INSERT INTO store.document (code, date) VALUES ('Поступление 2', '2022.01.11 12:00');
