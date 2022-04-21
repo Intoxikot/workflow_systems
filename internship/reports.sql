@@ -23,14 +23,15 @@ WHERE
 	document.document_id = fluidity.document_id and
 	document.document_id = fluidity.document_id 
 	/* and document.date >= {BeginDate} and document.date <= {FinalDate} */
-group by
+GROUP BY
 	fluidity.product_id
-	
+ORDER BY
+	fluidity.product_id
 
 -- Учет по бухгалтерскому движению средств по месяцам
 
 SELECT
-	to_char(document.date :: DATE, 'yyyy/mm'),
+	to_char(document.date :: DATE, 'yyyy/mm') as date,
 	sum(fluidity.income) as income
 FROM
 	store.document,
@@ -53,6 +54,8 @@ WHERE
 	/* and document.date >= {BeginDate} and document.date <= {FinalDate} */
 GROUP BY
 	to_char(document.date :: DATE, 'yyyy/mm')
+ORDER BY
+	date
 
 	
 	
