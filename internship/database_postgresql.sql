@@ -8,11 +8,17 @@ CREATE DATABASE workflow_technology
 
 CREATE SCHEMA IF NOT EXISTS store; 
 
-DROP TABLE IF EXISTS store.product;
+DROP TABLE IF EXISTS store.inventory_item;
 DROP TABLE IF EXISTS store.income;
 DROP TABLE IF EXISTS store.outcome;
 DROP TABLE IF EXISTS store.document;
-DROP TABLE IF EXISTS store.inventory_item;
+DROP TABLE IF EXISTS store.product;
+
+DROP SEQUENCE IF EXISTS store.product_id_seq;
+DROP SEQUENCE IF EXISTS store.document_id_seq;
+DROP SEQUENCE IF EXISTS store.income_id_seq;
+DROP SEQUENCE IF EXISTS store.outcome_id_seq;
+DROP SEQUENCE IF EXISTS store.inventory_item_id_seq;
 
 CREATE SEQUENCE IF NOT EXISTS store.product_id_seq;
 CREATE SEQUENCE IF NOT EXISTS store.income_id_seq;
@@ -40,8 +46,8 @@ CREATE TABLE IF NOT EXISTS store.document (
 CREATE TABLE IF NOT EXISTS store.income (
 	income_id bigint NOT NULL
 	DEFAULT NEXTVAL('store.income_id_seq'::regclass),
-	product_id int NOT NULL,
 	document_id int NOT NULL,
+	product_id int NOT NULL,
 	count numeric(8,4) NOT NULL,
 	cost numeric(16,8) NOT NULL,
 	CONSTRAINT income_pk  
@@ -57,8 +63,8 @@ CREATE TABLE IF NOT EXISTS store.income (
 CREATE TABLE IF NOT EXISTS store.outcome (
 	outcome_id bigint NOT NULL
 	DEFAULT NEXTVAL('store.outcome_id_seq'::regclass),
-	product_id int NOT NULL,
 	document_id int NOT NULL,
+	product_id int NOT NULL,
 	count numeric(8,4) NOT NULL,
 	cost numeric(16,8) NOT NULL,
 	CONSTRAINT outcome_pk
@@ -72,11 +78,11 @@ CREATE TABLE IF NOT EXISTS store.outcome (
 );
 
 CREATE TABLE IF NOT EXISTS store.inventory_item (
-	"item_id" bigint NOT NULL
+	item_id bigint NOT NULL
 	DEFAULT NEXTVAL('store.inventory_item_id_seq'::regclass),
-	"document_id" int NOT NULL,
-	"product_id" int NOT NULL,
-	"count" numeric(8,4) NOT NULL,
+	document_id int NOT NULL,
+	product_id int NOT NULL,
+	count numeric(8,4) NOT NULL,
 	CONSTRAINT "inventory_item_id_pk" 
 		PRIMARY KEY ("item_id"),
 	CONSTRAINT inventory_item_fk0 
